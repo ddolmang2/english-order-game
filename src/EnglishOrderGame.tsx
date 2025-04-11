@@ -229,6 +229,10 @@ const originalDialogues = [
   // 나머지 문장들도 여기에 계속 추가 가능
 ];
 
+const SpeechRecognition =
+  typeof window !== "undefined" &&
+  ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+
 export default function EnglishOrderGame() {
   const totalQuestions = 10;
   const [dialogues, setDialogues] = useState(() => sampleSize(originalDialogues, totalQuestions));
@@ -240,25 +244,18 @@ export default function EnglishOrderGame() {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [incorrectAnswers, setIncorrectAnswers] = useState<{ npc: string; correctOrder: string[] }[]>([]);
+  const [recognizedText, setRecognizedText] = useState<string>("");
 
   const current = dialogues[step];
 
   const speak = (text: string) => {
     window.speechSynthesis.cancel();
-
     const voices = window.speechSynthesis.getVoices();
     const googleVoice = voices.find(v => v.name === "Google US English");
-
-    if (!googleVoice) {
-      console.warn("🛑 Google US English voice not available");
-      return;
-    }
-
+    if (!googleVoice) return;
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.voice = googleVoice;
     utterance.lang = "en-US";
-
-    console.log("🔊 Speaking with:", googleVoice.name);
     window.speechSynthesis.speak(utterance);
   };
 
@@ -291,6 +288,7 @@ export default function EnglishOrderGame() {
     setIsCorrect(null);
     setHintCount(0);
     setHintIndexes([]);
+    setRecognizedText("");
   };
 
   const showHint = () => {
@@ -301,6 +299,26 @@ export default function EnglishOrderGame() {
       setHintIndexes([...hintIndexes, ...newHints]);
       setHintCount(hintCount + 1);
     }
+  };
+
+  const handleSpeechInput = () => {
+    if (!SpeechRecognition) {
+      alert("Speech recognition not supported in this browser.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.onresult = (event: any) => {
+      const text = event.results[0][0].transcript;
+      setRecognizedText(text);
+      const words = text.trim().split(" ");
+      setSelected(words);
+    };
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error", event);
+    };
+    recognition.start();
   };
 
   if (finished) {
@@ -332,9 +350,7 @@ export default function EnglishOrderGame() {
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
       <div style={{ padding: "20px", fontFamily: "Arial", maxWidth: "600px", textAlign: "center", fontSize: "2rem" }}>
         <p style={{ marginBottom: 0 }}>Question {step + 1} of {totalQuestions}</p>
-        <p>
-          <strong style={{ color: "green" }}>{current.context}</strong>
-        </p>
+        <p><strong style={{ color: "green" }}>{current.context}</strong></p>
         <p style={{ color: "red" }}>{current.npc}</p>
         <button onClick={() => speak(current.npc)} style={{ fontSize: "1rem", marginBottom: "16px" }}>🔊 Listen to Question</button>
 
@@ -365,10 +381,15 @@ export default function EnglishOrderGame() {
           <button onClick={() => speak(selected.join(" "))} style={{ fontSize: "1rem", marginTop: "8px" }}>🔊 Listen to Answer</button>
         )}
 
-        {isCorrect === null && (
-          <div>
-            <button onClick={checkAnswer} style={{ marginTop: "12px", fontSize: "1rem", marginRight: "8px" }}>Check</button>
-            <button onClick={showHint} style={{ marginTop: "12px", fontSize: "1rem" }}>💡 Show Hint</button>
+        <div style={{ marginTop: "12px" }}>
+          <button onClick={checkAnswer} style={{ fontSize: "1rem", marginRight: "8px" }}>Check</button>
+          <button onClick={showHint} style={{ fontSize: "1rem", marginRight: "8px" }}>💡 Show Hint</button>
+          <button onClick={handleSpeechInput} style={{ fontSize: "1rem" }}>🎤 Speak Answer</button>
+        </div>
+
+        {recognizedText && (
+          <div style={{ marginTop: "12px", fontSize: "1rem", color: "gray" }}>
+            Recognized: "{recognizedText}"
           </div>
         )}
 
