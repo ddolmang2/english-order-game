@@ -1,0 +1,89 @@
+const originalDialogues = [
+{
+    id: 1,
+    context: "You are at a coffee shop. The barista says:",
+    npc: "Hello! What would you like to drink?",
+    correctOrder: ["I'd", "like", "a", "coffee."],
+    shuffled: ["coffee.", "I'd", "a", "like"]
+  },
+  {
+    id: 2,
+    context: "You are checking into a hotel. The receptionist says:",
+    npc: "Do you have a reservation?",
+    correctOrder: ["Yes,", "I", "have", "a", "reservation."],
+    shuffled: ["a", "reservation.", "have", "Yes,", "I"]
+  }
+,
+{
+  id: 23,
+  context: "You are in a job interview. The interviewer asks:",
+  npc: "Can you describe your experience in cybersecurity?",
+  correctOrder: ["Yes,", "I", "have", "three", "years", "of", "experience", "in", "cybersecurity."],
+  shuffled: ["experience", "of", "Yes,", "years", "in", "have", "cybersecurity.", "three", "I"]
+},
+{
+  id: 24,
+  context: "The interviewer asks:",
+  npc: "What security tools are you familiar with?",
+  correctOrder: ["I", "am", "familiar", "with", "Wireshark", "and", "Nmap."],
+  shuffled: ["Nmap.", "familiar", "I", "am", "and", "Wireshark", "with"]
+},
+{
+  id: 25,
+  context: "The interviewer asks:",
+  npc: "How do you handle a data breach?",
+  correctOrder: ["First,", "I", "contain", "the", "breach", "and", "then", "investigate", "the", "incident."],
+  shuffled: ["incident.", "contain", "the", "First,", "breach", "then", "the", "and", "investigate", "I"]
+},
+{
+  id: 26,
+  context: "The interviewer asks:",
+  npc: "Have you ever performed a vulnerability assessment?",
+  correctOrder: ["Yes,", "I", "have", "performed", "several", "vulnerability", "assessments."],
+  shuffled: ["performed", "vulnerability", "I", "Yes,", "assessments.", "several", "have"]
+},
+{
+  id: 27,
+  context: "The interviewer asks:",
+  npc: "Why do you want to work in our company?",
+  correctOrder: ["I", "admire", "your", "focus", "on", "cybersecurity", "innovation."],
+  shuffled: ["focus", "your", "I", "on", "innovation.", "cybersecurity", "admire"]
+},
+{
+  id: 28,
+  context: "The interviewer asks:",
+  npc: "How do you stay updated on security trends?",
+  correctOrder: ["I", "read", "blogs,", "attend", "webinars,", "and", "follow", "experts", "on", "LinkedIn."],
+  shuffled: ["on", "experts", "blogs,", "I", "webinars,", "read", "and", "attend", "LinkedIn.", "follow"]
+},
+{
+  id: 29,
+  context: "The interviewer asks:",
+  npc: "Can you explain what a firewall does?",
+  correctOrder: ["A", "firewall", "monitors", "and", "controls", "network", "traffic."],
+  shuffled: ["controls", "network", "A", "traffic.", "firewall", "and", "monitors"]
+},
+{
+  id: 30,
+  context: "The interviewer asks:",
+  npc: "What is your approach to risk management?",
+  correctOrder: ["I", "identify", "risks,", "assess", "them,", "and", "apply", "appropriate", "controls."],
+  shuffled: ["controls.", "I", "them,", "apply", "appropriate", "identify", "and", "risks,", "assess"]
+},
+{
+  id: 31,
+  context: "The interviewer asks:",
+  npc: "Tell me about a time you solved a critical issue.",
+  correctOrder: ["I", "detected", "malware", "in", "the", "network", "and", "removed", "it", "quickly."],
+  shuffled: ["in", "the", "detected", "and", "network", "I", "it", "removed", "quickly.", "malware"]
+},
+{
+  id: 32,
+  context: "The interviewer asks:",
+  npc: "Do you have any certifications?",
+  correctOrder: ["Yes,", "I", "have", "a", "CompTIA", "Security+", "certification."],
+  shuffled: ["certification.", "Security+", "have", "a", "I", "Yes,", "CompTIA"]
+}
+
+  // 나머지 문장들도 여기에 계속 추가 가능
+];
